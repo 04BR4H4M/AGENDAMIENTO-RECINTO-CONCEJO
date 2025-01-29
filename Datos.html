@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamiento</title>
+    <link rel="stylesheet" href="CSS/Datos.css">
+</head>
+<body>
+    <h2>Formulario de Agendamiento</h2>
+    <form id="form-agendamiento">
+        <div>
+            <label for="persona">Persona que agenda:</label>
+            <input type="text" id="persona" name="persona" required>
+        </div>
+        <div>
+            <label for="motivo">Motivo de agendamiento:</label>
+            <textarea id="motivo" name="motivo" required></textarea>
+        </div>
+        <input type="hidden" id="fecha" name="fecha">
+        <input type="hidden" id="hora" name="hora">
+        <button type="submit">Enviar</button>
+    </form>
+
+    <h2>Agendamientos del mes</h2>
+    <div id="resumen-agendamientos" class="tarjetas-container">
+        <!-- Aquí se mostrarán los agendamientos del mes -->
+    </div>
+
+    <button id="nuevo-agendamiento" class="boton-nuevo-agendamiento">Nuevo agendamiento</button>
+
+    <script src="JS/Datos.js"></script>
+</body>
+</html>

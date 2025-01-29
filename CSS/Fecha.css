@@ -1,0 +1,127 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 20px 0;
+    font-size: 24px;
+    color: #333;
+}
+
+#leyenda {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+#leyenda span {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.actual {
+    background-color: #00bcd4;
+}
+
+.seleccionada {
+    background-color: #000;
+}
+
+.disponible {
+    background-color: #4caf50;
+}
+
+.no-disponible {
+    background-color: #9e9e9e;
+}
+
+.navegacion-calendario {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.calendario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#mes-anio {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#dias-del-mes {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin: 10px auto;
+    max-width: 350px;
+}
+
+.dia {
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
+    user-select: none;
+}
+
+.dia.actual {
+    background-color: #00bcd4;
+    color: white;
+}
+
+.dia.disponible {
+    background-color: #4caf50;
+    color: white;
+}
+
+.dia.no-disponible {
+    background-color: #9e9e9e;
+    color: white;
+    cursor: not-allowed;
+}
+
+.dia.seleccionada {
+    background-color: #000;
+    color: white;
+}
+
+.dia.no-disponible-total {
+    background-color: #5a5959;
+    color: white;
+    cursor: not-allowed;
+}
+
+.calendario header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendario header h3 {
+    margin: 0;
+}
+
+.calendario table {
+    margin-top: 0;
+    width: auto;
+    max-width: 350px;
+    border-collapse: collapse;
+}
+
+.calendario th{
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+}
+

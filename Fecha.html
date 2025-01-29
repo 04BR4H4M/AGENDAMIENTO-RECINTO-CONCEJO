@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Fecha</title>
+    <link rel="stylesheet" href="./CSS/Fecha.css">
+</head>
+<body>
+    <header>
+        <h1>Seleccione la fecha</h1>
+    </header>
+    <main>
+        <section class="calendario">
+            <div id="leyenda">
+                <span class="actual">Actual</span>
+                <span class="seleccionada">Seleccionada</span>
+                <span class="disponible">Disponible</span>
+                <span class="no-disponible">No disponible</span>
+            </div>
+            <div class="navegacion-calendario">
+                <button id="btn-prev">&lt;</button>
+                <span id="mes-anio"></span>
+                <button id="btn-next">&gt;</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>DO</th>
+                        <th>LU</th>
+                        <th>MA</th>
+                        <th>MI</th>
+                        <th>JU</th>
+                        <th>VI</th>
+                        <th>SA</th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="dias-del-mes"></div>
+        </section>
+    </main>
+
+    <script src="./JS/fecha.js"></script>
+</body>
+</html>
