@@ -45,6 +45,13 @@ h2 {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#hora:hover, #minuto:hover,
+#hora:focus, #minuto:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .boton-siguiente {
@@ -52,15 +59,21 @@ h2 {
     width: 100%;
     padding: 10px;
     font-size: 16px;
+    font-weight: bold;
     color: white;
-    background-color: #4caf50;
+    background-color: #007BFF;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .boton-siguiente:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
+.boton-siguiente:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

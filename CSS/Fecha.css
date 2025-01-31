@@ -119,9 +119,8 @@ header h1 {
     border-collapse: collapse;
 }
 
-.calendario th{
+.calendario th {
     text-align: center;
     padding: 10px;
     border: 1px solid #e0e0e0;
 }
-

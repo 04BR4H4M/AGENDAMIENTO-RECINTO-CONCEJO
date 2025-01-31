@@ -5,7 +5,7 @@ fetch('./PHP/obtener_horas.php')
     .then(response => response.json())
     .then(data => {
         horasDisponiblesPorDia = data;
-        generarCalendario();
+        generarCalendario(); // Mover la llamada aquí
     });
 
 const contenedorDias = document.getElementById("dias-del-mes");
@@ -75,6 +75,9 @@ function generarCalendario() {
 
     // Actualizar el encabezado del mes y año
     mesAnio.textContent = `${obtenerNombreMes(mes)} ${anio}`;
+
+    // Verificar la hora actual después de generar el calendario
+    verificarHoraActual();
 }
 
 function obtenerNombreMes(mes) {
@@ -103,3 +106,27 @@ btnNext.addEventListener("click", () => {
     }
     generarCalendario();
 });
+
+// Verificar si la hora actual es después de las 5:00 PM
+function verificarHoraActual() {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentDate = now.toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+
+    if (currentHour >= 17) { // Si es después de las 5:00 PM
+        const dias = document.querySelectorAll(".dia");
+        dias.forEach(dia => {
+            const diaFecha = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia.textContent).padStart(2, '0')}`;
+            if (diaFecha <= currentDate) {
+                dia.classList.add("no-disponible-total");
+                dia.classList.remove("disponible", "no-disponible", "actual");
+                dia.removeEventListener("click", () => {}); // Deshabilitar la selección
+            }
+        });
+    }
+}
+
+// Sincronización automática del calendario cada minuto
+setInterval(() => {
+    generarCalendario(); // Regenerar el calendario cada minuto
+}, 60000); // 60000 ms = 1 minuto
