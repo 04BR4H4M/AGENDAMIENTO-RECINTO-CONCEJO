@@ -3,28 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selector de Hora</title>
-    <link rel="stylesheet" href="CSS/Hora.css">
+    <title>Seleccionar Hora</title>
+    <link rel="stylesheet" href="./CSS/Hora.css">
 </head>
 <body>
-    <main class="horas-container">
-        <h2>Seleccione la hora:</h2>
-        <div class="selector-horas">
-            <div class="selector-horas-minutos">
-                <div>
-                    <label for="hora">Hora:</label>
-                    <select id="hora"></select>
-                </div>
-                <div>
-                    <label for="minuto">Minuto:</label>
-                    <select id="minuto"></select>
+    <header>
+        <h1>Seleccione la hora</h1>
+    </header>
+    <main>
+        <section class="horas">
+            <div class="selector-horas">
+                <div class="selector-horas-minutos">
+                    <div>
+                        <label for="hora">Hora:</label>
+                        <select id="hora"></select>
+                    </div>
+                    <div>
+                        <label for="minuto">Minuto:</label>
+                        <select id="minuto"></select>
+                    </div>
                 </div>
             </div>
+            <input type="hidden" id="fecha" name="fecha">
+        </section>
+        <div class="navegacion-paginas">
+            <button id="btn-fecha">&lt; Seleccionar Fecha</button>
+            <button id="btn-datos">&gt; Ingresar Datos</button>
         </div>
-        <input type="hidden" id="fecha" name="fecha">
-        <button class="boton-siguiente">Siguiente</button>
     </main>
 
-    <script src="JS/hora.js"></script>
+    <script src="./JS/hora.js"></script>
 </body>
 </html>

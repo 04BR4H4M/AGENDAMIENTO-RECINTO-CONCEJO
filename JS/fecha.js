@@ -15,6 +15,7 @@ const contenedorDias = document.getElementById("dias-del-mes");
 const mesAnio = document.getElementById("mes-anio");
 const btnPrev = document.getElementById("btn-prev");
 const btnNext = document.getElementById("btn-next");
+const btnHora = document.getElementById("btn-hora");
 
 let fechaActual = new Date();
 let mes = fechaActual.getMonth();
@@ -116,6 +117,11 @@ btnNext.addEventListener("click", () => {
         anio++;
     }
     generarCalendario();
+});
+
+// Navegar a la página de selección de hora
+btnHora.addEventListener("click", () => {
+    window.location.href = 'Hora.html';
 });
 
 // Sincronización automática del calendario cada minuto

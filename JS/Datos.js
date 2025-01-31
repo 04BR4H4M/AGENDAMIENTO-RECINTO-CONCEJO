@@ -45,6 +45,11 @@ window.onload = () => {
     document.getElementById('nuevo-agendamiento').addEventListener('click', () => {
         window.location.href = 'Fecha.html';
     });
+
+    document.getElementById('btn-hora').addEventListener('click', () => {
+        const fecha = document.getElementById('fecha').value;
+        window.location.href = `Hora.html?fecha=${fecha}`;
+    });
 };
 
 document.getElementById('form-agendamiento').addEventListener('submit', function(event) {
@@ -60,24 +65,38 @@ document.getElementById('form-agendamiento').addEventListener('submit', function
         return;
     }
 
-    // Codificar datos correctamente
+    // Codificar los datos para enviar
     const datos = new URLSearchParams();
     datos.append('persona', persona);
     datos.append('motivo', motivo);
     datos.append('fecha', fecha);
     datos.append('hora', hora);
 
-    fetch('PHP/guardar_agendamiento.php', {
+    const baseURL = window.location.origin; // Esto obtiene la URL base del servidor actual
+
+    fetch(`${baseURL}/Agen/AGENDAMIENTO-RECINTO-CONCEJO-1/PHP/guardar_agendamiento.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: datos,
     })
-    .then(response => response.text())
+    .then(response => {
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Archivo no encontrado. Por favor, verifica que el archivo guardar_agendamiento.php existe.');
+            } else {
+                throw new Error('Error en la respuesta del servidor');
+            }
+        }
+        return response.text();
+    })
     .then(data => {
         alert(data);
-        window.location.reload();
+        window.location.reload(); // Recargar para ver los cambios
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        alert(error.message);
+    });
 });
