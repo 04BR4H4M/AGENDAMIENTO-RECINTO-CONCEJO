@@ -2,11 +2,21 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column; /* Cambiado a columna para alinear verticalmente */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+header {
     text-align: center;
+    margin-bottom: 30px; /* Aumentado el margen inferior */
 }
 
 header h1 {
-    margin: 20px 0;
+    margin: 0;
     font-size: 24px;
     color: #333;
 }
@@ -16,12 +26,14 @@ header h1 {
     justify-content: center;
     gap: 20px;
     margin: 20px 0;
+    flex-wrap: wrap;
 }
 
 #leyenda span {
     padding: 5px 10px;
     border-radius: 5px;
     color: white;
+    font-size: 14px;
 }
 
 .actual {
@@ -43,35 +55,55 @@ header h1 {
 .navegacion-calendario {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 10px;
     margin-bottom: 10px;
 }
 
+.navegacion-calendario button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.navegacion-calendario button:hover {
+    background-color: #45a049;
+}
+
 .calendario {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
 }
 
 #mes-anio {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
+    color: #333;
 }
 
 #dias-del-mes {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    margin: 10px auto;
-    max-width: 350px;
+    gap: 10px;
+    margin: 10px 0;
 }
 
 .dia {
-    padding: 10px;
+    padding: 15px;
     border-radius: 50%;
     cursor: pointer;
     text-align: center;
     user-select: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .dia.actual {
@@ -101,21 +133,9 @@ header h1 {
     cursor: not-allowed;
 }
 
-.calendario header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.calendario header h3 {
-    margin: 0;
-}
-
 .calendario table {
     margin-top: 0;
-    width: auto;
-    max-width: 350px;
+    width: 100%;
     border-collapse: collapse;
 }
 
@@ -123,4 +143,35 @@ header h1 {
     text-align: center;
     padding: 10px;
     border: 1px solid #e0e0e0;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+    .calendario {
+        padding: 10px;
+    }
+
+    #mes-anio {
+        font-size: 18px;
+    }
+
+    .dia {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .navegacion-calendario button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    #leyenda span {
+        font-size: 12px;
+    }
+
+    header h1 {
+        font-size: 20px; /* Tamaño más pequeño para móviles */
+    }
 }

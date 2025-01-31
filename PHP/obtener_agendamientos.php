@@ -1,24 +1,27 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include 'db_config.php';
 
 $mesActual = date('m');
 $anioActual = date('Y');
 
-$sql = "SELECT fecha, hora, persona, motivo FROM agendamiento WHERE MONTH(fecha) = '$mesActual' AND YEAR(fecha) = '$anioActual'";
-$result = $conn->query($sql);
+// Consulta preparada
+$sql = "SELECT fecha, hora, persona, motivo FROM agendamiento WHERE MONTH(fecha) = ? AND YEAR(fecha) = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $mesActual, $anioActual);
+$stmt->execute();
+$result = $stmt->get_result();
 
 $agendamientos = array();
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $agendamientos[] = $row;
-    }
-} else {
-    // Agregar mensaje de depuración si no hay resultados
-    error_log("No se encontraron agendamientos para el mes $mesActual y año $anioActual.");
+while ($row = $result->fetch_assoc()) {
+    $agendamientos[] = $row;
 }
 
 header('Content-Type: application/json');
 echo json_encode($agendamientos);
 
+$stmt->close();
 $conn->close();
 ?>

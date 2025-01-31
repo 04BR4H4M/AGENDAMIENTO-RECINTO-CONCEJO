@@ -11,19 +11,14 @@ window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const fecha = urlParams.get('fecha');
     const hora = urlParams.get('hora');
+
     document.getElementById('fecha').value = fecha;
     document.getElementById('hora').value = hora;
 
     // Obtener y mostrar los agendamientos del mes
     fetch('PHP/obtener_agendamientos.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log('Agendamientos obtenidos:', data); // Agregar esta línea para depuración
             const resumenContainer = document.getElementById('resumen-agendamientos');
             if (data.length === 0) {
                 resumenContainer.innerHTML = '<p>No hay agendamientos para este mes.</p>';
@@ -42,7 +37,6 @@ window.onload = () => {
             }
         })
         .catch(error => {
-            console.error('Error:', error);
             const resumenContainer = document.getElementById('resumen-agendamientos');
             resumenContainer.innerHTML = '<p>Error al obtener los agendamientos.</p>';
         });
@@ -60,17 +54,30 @@ document.getElementById('form-agendamiento').addEventListener('submit', function
     const fecha = document.getElementById('fecha').value;
     const hora = document.getElementById('hora').value;
 
+    // Validar campos vacíos
+    if (!fecha || !hora || !persona || !motivo) {
+        alert("Todos los campos son obligatorios.");
+        return;
+    }
+
+    // Codificar datos correctamente
+    const datos = new URLSearchParams();
+    datos.append('persona', persona);
+    datos.append('motivo', motivo);
+    datos.append('fecha', fecha);
+    datos.append('hora', hora);
+
     fetch('PHP/guardar_agendamiento.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `persona=${persona}&motivo=${motivo}&fecha=${fecha}&hora=${hora}`
+        body: datos,
     })
     .then(response => response.text())
     .then(data => {
         alert(data);
-        window.location.href = 'Datos.html';
+        window.location.reload();
     })
     .catch(error => console.error('Error:', error));
 });

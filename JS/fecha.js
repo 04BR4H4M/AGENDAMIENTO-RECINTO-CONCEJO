@@ -1,11 +1,14 @@
 // Variables globales para las fechas disponibles y ocupadas
 let horasDisponiblesPorDia = {};
 
-fetch('./PHP/obtener_horas.php')
+fetch('http://localhost/Agen/AGENDAMIENTO-RECINTO-CONCEJO-1/PHP/obtener_horas.php')
     .then(response => response.json())
     .then(data => {
         horasDisponiblesPorDia = data;
-        generarCalendario(); // Mover la llamada aquí
+        generarCalendario();
+    })
+    .catch(error => {
+        console.error('Error al obtener las horas:', error);
     });
 
 const contenedorDias = document.getElementById("dias-del-mes");
@@ -22,6 +25,9 @@ function generarCalendario() {
 
     const primerDiaMes = new Date(anio, mes, 1).getDay();
     const diasEnMes = new Date(anio, mes + 1, 0).getDate();
+    const ahora = new Date();
+    const fechaHoy = ahora.toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
+    const horaActual = ahora.getHours();
 
     // Rellenar los días del calendario
     for (let i = 0; i < primerDiaMes; i++) {
@@ -38,8 +44,14 @@ function generarCalendario() {
         // Formato para comparar fechas
         const fechaFormato = fecha.toISOString().split("T")[0];
 
-        // Verificar estado de la fecha
-        if (fecha.getDay() === 0 || fecha.getDay() === 6 || horasDisponiblesPorDia[fechaFormato]?.length === 0) {
+        // Verificar si el día es anterior a hoy o es hoy después de las 5:00 PM
+        const esDiaAnterior = fechaFormato < fechaHoy;
+        const esHoyDespuesDe5PM = fechaFormato === fechaHoy && horaActual >= 17;
+
+        // Aplicar reglas de disponibilidad
+        if (esDiaAnterior || esHoyDespuesDe5PM) {
+            diaElemento.classList.add("no-disponible-total");
+        } else if (fecha.getDay() === 0 || fecha.getDay() === 6 || horasDisponiblesPorDia[fechaFormato]?.length === 0) {
             diaElemento.classList.add("no-disponible-total");
         } else if (horasDisponiblesPorDia[fechaFormato]?.length > 0 && horasDisponiblesPorDia[fechaFormato]?.length < 3) {
             diaElemento.classList.add("no-disponible");
@@ -47,17 +59,19 @@ function generarCalendario() {
             diaElemento.classList.add("disponible");
         }
 
-        // Marcar el día actual
-        if (fecha.toDateString() === new Date().toDateString()) {
+        // Marcar el día actual (solo si no está deshabilitado)
+        if (fecha.toDateString() === new Date().toDateString() && !esHoyDespuesDe5PM) {
             diaElemento.classList.add("actual");
         }
 
         diaElemento.textContent = dia;
 
-        // Agregar funcionalidad de selección
-        if (!diaElemento.classList.contains("no-disponible-total")) {
+        // Deshabilitar clics en días no disponibles
+        if (diaElemento.classList.contains("no-disponible-total")) {
+            diaElemento.style.pointerEvents = "none";
+        } else {
             diaElemento.addEventListener("click", () => {
-                const fechaSeleccionada = `${anio}-${mes + 1}-${dia}`;
+                const fechaSeleccionada = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
                 window.location.href = `Hora.html?fecha=${fechaSeleccionada}`;
             });
 
@@ -75,9 +89,6 @@ function generarCalendario() {
 
     // Actualizar el encabezado del mes y año
     mesAnio.textContent = `${obtenerNombreMes(mes)} ${anio}`;
-
-    // Verificar la hora actual después de generar el calendario
-    verificarHoraActual();
 }
 
 function obtenerNombreMes(mes) {
@@ -107,26 +118,7 @@ btnNext.addEventListener("click", () => {
     generarCalendario();
 });
 
-// Verificar si la hora actual es después de las 5:00 PM
-function verificarHoraActual() {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentDate = now.toISOString().split("T")[0]; // Fecha actual en formato YYYY-MM-DD
-
-    if (currentHour >= 17) { // Si es después de las 5:00 PM
-        const dias = document.querySelectorAll(".dia");
-        dias.forEach(dia => {
-            const diaFecha = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia.textContent).padStart(2, '0')}`;
-            if (diaFecha <= currentDate) {
-                dia.classList.add("no-disponible-total");
-                dia.classList.remove("disponible", "no-disponible", "actual");
-                dia.removeEventListener("click", () => {}); // Deshabilitar la selección
-            }
-        });
-    }
-}
-
 // Sincronización automática del calendario cada minuto
 setInterval(() => {
-    generarCalendario(); // Regenerar el calendario cada minuto
+    generarCalendario();
 }, 60000); // 60000 ms = 1 minuto

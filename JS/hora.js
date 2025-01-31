@@ -38,7 +38,14 @@ window.onload = () => {
     document.getElementById('fecha').value = fecha;
     generarHoras();
     generarMinutos();
+
+    // Validar la hora seleccionada antes de redirigir
     document.querySelector('.boton-siguiente').addEventListener('click', () => {
-        window.location.href = `Datos.html?fecha=${fecha}&hora=${document.getElementById('hora').value}:${document.getElementById('minuto').value}`;
-    });
-};
+        const urlParams = new URLSearchParams(window.location.search);
+        const fecha = urlParams.get('fecha');
+        const hora = document.getElementById('hora').value;
+        const minuto = document.getElementById('minuto').value.padStart(2, '0'); // Asegurar 2 dígitos
+        
+        window.location.href = `Datos.html?fecha=${fecha}&hora=${hora}:${minuto}`;
+        });
+    }
