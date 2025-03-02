@@ -37,7 +37,8 @@ header h1 {
 }
 
 .actual {
-    background-color: #00bcd4;
+    background-color: #00bcd4; /* Cambia este color según tus necesidades */
+    color: #fff;
 }
 
 .seleccionada {
@@ -107,8 +108,8 @@ header h1 {
 }
 
 .dia.actual {
-    background-color: #00bcd4;
-    color: white;
+    background-color: #00bcd4 !important; /* Añadir !important para forzar la aplicación del estilo */
+    color: white !important; /* Añadir !important para forzar la aplicación del estilo */
 }
 
 .dia.disponible {

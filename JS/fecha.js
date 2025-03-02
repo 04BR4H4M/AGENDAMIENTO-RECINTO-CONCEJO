@@ -5,7 +5,7 @@ fetch('http://localhost/Agen/AGENDAMIENTO-RECINTO-CONCEJO-1/PHP/obtener_horas.ph
     .then(response => response.json())
     .then(data => {
         horasDisponiblesPorDia = data;
-        generarCalendario();
+        generarCalendario(); // Llamar a generarCalendario después de obtener los datos
     })
     .catch(error => {
         console.error('Error al obtener las horas:', error);
@@ -15,13 +15,13 @@ const contenedorDias = document.getElementById("dias-del-mes");
 const mesAnio = document.getElementById("mes-anio");
 const btnPrev = document.getElementById("btn-prev");
 const btnNext = document.getElementById("btn-next");
-const btnHora = document.getElementById("btn-hora");
 
 let fechaActual = new Date();
 let mes = fechaActual.getMonth();
 let anio = fechaActual.getFullYear();
 
 function generarCalendario() {
+    console.log("Generando calendario..."); // Agregar para verificar la llamada
     contenedorDias.innerHTML = "";
 
     const primerDiaMes = new Date(anio, mes, 1).getDay();
@@ -61,7 +61,7 @@ function generarCalendario() {
         }
 
         // Marcar el día actual (solo si no está deshabilitado)
-        if (fecha.toDateString() === new Date().toDateString() && !esHoyDespuesDe5PM) {
+        if (fechaFormato === fechaHoy && !esHoyDespuesDe5PM) {
             diaElemento.classList.add("actual");
         }
 
@@ -119,10 +119,10 @@ btnNext.addEventListener("click", () => {
     generarCalendario();
 });
 
-// Navegar a la página de selección de hora
-btnHora.addEventListener("click", () => {
-    window.location.href = 'Hora.html';
-});
+// Llamar a generarCalendario al cargar la página
+window.onload = () => {
+    generarCalendario();
+};
 
 // Sincronización automática del calendario cada minuto
 setInterval(() => {

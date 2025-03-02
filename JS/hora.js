@@ -48,14 +48,4 @@ window.onload = () => {
         
         window.location.href = `Datos.html?fecha=${fecha}&hora=${hora}:${minuto}`;
     });
-
-    document.getElementById('btn-fecha').addEventListener('click', () => {
-        window.location.href = 'Fecha.html';
-    });
-
-    document.getElementById('btn-datos').addEventListener('click', () => {
-        const fecha = new URLSearchParams(window.location.search).get('fecha');
-        const hora = document.querySelector('input[name="hora"]:checked').value;
-        window.location.href = `Datos.html?fecha=${fecha}&hora=${hora}`;
-    });
 }

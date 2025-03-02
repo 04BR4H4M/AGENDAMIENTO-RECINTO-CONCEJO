@@ -72,9 +72,7 @@ document.getElementById('form-agendamiento').addEventListener('submit', function
     datos.append('fecha', fecha);
     datos.append('hora', hora);
 
-    const baseURL = window.location.origin; // Esto obtiene la URL base del servidor actual
-
-    fetch(`${baseURL}/Agen/AGENDAMIENTO-RECINTO-CONCEJO-1/PHP/guardar_agendamiento.php`, {
+    fetch('PHP/guardar_agendamiento.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -99,4 +97,9 @@ document.getElementById('form-agendamiento').addEventListener('submit', function
         console.error('Error:', error);
         alert(error.message);
     });
+});
+
+document.getElementById('btn-hora').addEventListener('click', () => {
+    const fecha = document.getElementById('fecha').value;
+    window.location.href = `Hora.html?fecha=${fecha}`;
 });
