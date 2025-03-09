@@ -13,16 +13,16 @@ h1, h2 {
 }
 
 form {
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
-    padding: 1em;
-    background: #f9f9f9;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 form div {
-    margin-bottom: 1em;
+    margin-bottom: 15px;
 }
 
 label {
@@ -33,56 +33,32 @@ label {
 }
 
 input[type="text"], textarea {
-    width: 100%;
+    width: calc(100% - 20px);
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 6px;
     background-color: #fff;
+    display: block;
+    margin: 0 auto;
 }
 
 button[type="submit"] {
     display: block;
-    width: 100%;
+    width: 50%;
+    margin: 10px auto;
     padding: 10px;
     font-size: 16px;
     color: white;
     background-color: #4caf50;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 button[type="submit"]:hover {
     background-color: #45a049;
-}
-
-form label {
-    margin-bottom: .5em;
-    color: #333333;
-    display: block;
-}
-
-form input, form textarea {
-    border: 1px solid #CCCCCC;
-    padding: .5em;
-    font-size: 1em;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-form button {
-    padding: 0.7em;
-    color: #fff;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-form button:hover {
-    background-color: #0056b3;
 }
 
 .tarjetas-container {
@@ -96,11 +72,12 @@ form button:hover {
 .agendamiento {
     background: #fff;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 1em;
-    width: 250px;
+    padding: 15px;
+    width: 280px;
     box-sizing: border-box;
+    text-align: start;
 }
 
 .agendamiento p {
@@ -115,17 +92,28 @@ form button:hover {
     display: block;
     width: 200px;
     margin: 20px auto;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     color: white;
     background-color: #007BFF;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     text-align: center;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .boton-nuevo-agendamiento:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+button i {
+    margin-right: 5px;
+}
+
+.agendamiento i {
+    margin-right: 8px;
+    color: #007BFF;
+    font-size: 14px;
 }

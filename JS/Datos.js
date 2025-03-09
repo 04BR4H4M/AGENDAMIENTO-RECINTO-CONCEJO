@@ -27,10 +27,10 @@ window.onload = () => {
                     const agendamientoDiv = document.createElement('div');
                     agendamientoDiv.classList.add('agendamiento');
                     agendamientoDiv.innerHTML = `
-                        <p><strong>Fecha:</strong> ${agendamiento.fecha}</p>
-                        <p><strong>Hora:</strong> ${formatearHora12(agendamiento.hora)}</p>
-                        <p><strong>Persona:</strong> ${agendamiento.persona}</p>
-                        <p><strong>Motivo:</strong> ${agendamiento.motivo}</p>
+                    <p><i class="fa-solid fa-calendar"></i> <strong>Fecha:</strong> ${agendamiento.fecha}</p>
+                    <p><i class="fa-solid fa-clock"></i> <strong>Hora:</strong> ${formatearHora12(agendamiento.hora)}</p>
+                    <p><i class="fa-solid fa-user"></i> <strong>Persona:</strong> ${agendamiento.persona}</p>
+                    <p><i class="fa-solid fa-pen"></i> <strong>Motivo:</strong> ${agendamiento.motivo}</p>
                     `;
                     resumenContainer.appendChild(agendamientoDiv);
                 });
