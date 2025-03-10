@@ -46,7 +46,7 @@ function generarCalendario() {
         const fechaFormato = fecha.toISOString().split("T")[0];
 
         // Verificar si el día es anterior a hoy o es hoy después de las 5:00 PM
-        const esDiaAnterior = fechaFormato < fechaHoy;
+        const esDiaAnterior = new Date(fechaFormato) < new Date(fechaHoy);
         const esHoyDespuesDe5PM = fechaFormato === fechaHoy && horaActual >= 17;
 
         // Aplicar reglas de disponibilidad

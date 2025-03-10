@@ -8,7 +8,7 @@ $mesActual = date('m');
 $anioActual = date('Y');
 
 // Consulta preparada
-$sql = "SELECT fecha, hora, persona, motivo FROM agendamiento WHERE MONTH(fecha) = ? AND YEAR(fecha) = ?";
+$sql = "SELECT id, fecha, hora, persona, motivo FROM agendamiento WHERE MONTH(fecha) = ? AND YEAR(fecha) = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $mesActual, $anioActual);
 $stmt->execute();
@@ -24,4 +24,5 @@ echo json_encode($agendamientos);
 
 $stmt->close();
 $conn->close();
+
 ?>

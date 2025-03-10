@@ -31,8 +31,39 @@ window.onload = () => {
                     <p><i class="fa-solid fa-clock"></i> <strong>Hora:</strong> ${formatearHora12(agendamiento.hora)}</p>
                     <p><i class="fa-solid fa-user"></i> <strong>Persona:</strong> ${agendamiento.persona}</p>
                     <p><i class="fa-solid fa-pen"></i> <strong>Motivo:</strong> ${agendamiento.motivo}</p>
+                    <button class="editar-agendamiento" data-id="${agendamiento.id}">Editar</button>
+                    <button class="eliminar-agendamiento" data-id="${agendamiento.id}">Eliminar</button>
                     `;
                     resumenContainer.appendChild(agendamientoDiv);
+                });
+
+                // Agregar eventos a los botones de editar y eliminar
+                document.querySelectorAll('.editar-agendamiento').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const id = event.target.getAttribute('data-id');
+                        // Redirigir a la página de edición con el ID del agendamiento
+                        window.location.href = `Editar.html?id=${id}`;
+                    });
+                });
+
+                document.querySelectorAll('.eliminar-agendamiento').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const id = event.target.getAttribute('data-id');
+                        if (confirm('¿Estás seguro de que deseas eliminar este agendamiento?')) {
+                            fetch(`PHP/eliminar_agendamiento.php?id=${id}`, {
+                                method: 'GET' // Cambiar a GET ya que PHP no maneja DELETE por defecto
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                alert(data);
+                                window.location.reload(); // Recargar para ver los cambios
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Error al eliminar el agendamiento.');
+                            });
+                        }
+                    });
                 });
             }
         })
