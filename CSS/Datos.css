@@ -117,3 +117,24 @@ button i {
     color: #007BFF;
     font-size: 14px;
 }
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.logo {
+    max-width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+
+header h2 {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+    margin-top: 10px;
+    margin: 0;
+}
