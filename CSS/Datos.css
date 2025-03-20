@@ -118,23 +118,22 @@ button i {
     font-size: 14px;
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 10px;
+
+.logo-concejo {
+    position: fixed; /* Fija el logo en la pantalla */
+    bottom: 20px; /* Lo coloca en la parte inferior */
+    right: 20px; /* Lo alinea a la derecha */
+    text-align: center; /* Centra el texto debajo del logo */
 }
 
-.logo {
-    max-width: 100px;
-    height: auto;
-    margin-right: 10px;
+.logo-concejo img {
+    width: 100px; /* Ajusta el tamaño del logo */
+    height: auto; /* Mantiene la proporción */
+    margin-top: auto; /* Alinea el logo en la parte superior */
 }
 
-header h2 {
-    text-align: center;
-    font-size: 18px;
-    color: #333;
-    margin-top: 10px;
-    margin: 0;
+.logo-concejo p {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: auto; /* Alinea el texto en la parte inferior */
 }
