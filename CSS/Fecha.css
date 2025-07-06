@@ -111,7 +111,12 @@ header h1 {
     z-index: 10;
 }
 
-/* Sistema de pasos mejorado */
+/* CRÍTICO: Sistema de pasos mejorado */
+.wizard-container {
+    position: relative;
+    min-height: 600px;
+}
+
 .paso {
     position: absolute;
     width: 100%;
@@ -123,12 +128,14 @@ header h1 {
     pointer-events: none;
     transform: translateX(30px);
     transition: all var(--transicion-normal);
+    background: var(--color-blanco);
 }
 
 .paso.activo {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
+    position: relative;
 }
 
 .paso-titulo {
@@ -152,7 +159,7 @@ header h1 {
     border-radius: var(--radio-sm);
 }
 
-/* Navegación del calendario mejorada */
+/* CRÍTICO: Navegación del calendario */
 .navegacion-calendario {
     display: flex;
     justify-content: space-between;
@@ -170,6 +177,7 @@ header h1 {
     color: var(--color-negro);
     text-align: center;
     flex: 1;
+    min-height: 2rem;
 }
 
 .btn-nav-calendario {
@@ -196,15 +204,18 @@ header h1 {
     box-shadow: var(--sombra-md);
 }
 
-/* Grid del calendario mejorado */
+/* CRÍTICO: Grid del calendario - DEBE SER VISIBLE */
 .calendario-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr) !important;
     gap: var(--espacio-sm);
     padding: var(--espacio-lg);
     background: var(--color-blanco);
     border-radius: var(--radio-lg);
     border: 1px solid var(--color-gris-medium);
+    min-height: 300px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .dia-nombre {
@@ -215,10 +226,12 @@ header h1 {
     padding: var(--espacio-md);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    background: var(--color-gris-light);
+    border-radius: var(--radio-sm);
 }
 
 .dia, .espacio-vacio {
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     aspect-ratio: 1;
@@ -228,6 +241,7 @@ header h1 {
     transition: all var(--transicion-rapida);
     position: relative;
     min-height: 48px;
+    border: 1px solid transparent;
 }
 
 .dia {
@@ -268,6 +282,11 @@ header h1 {
     transform: translateY(-3px) scale(1.05);
     box-shadow: var(--sombra-lg);
     z-index: 10;
+}
+
+.espacio-vacio {
+    background: transparent;
+    cursor: default;
 }
 
 /* Leyenda mejorada */
@@ -648,6 +667,19 @@ header h1 {
     margin-bottom: var(--espacio-2xl);
     text-align: center;
     line-height: 1.6;
+}
+
+/* DEBUG: Estilos temporales para verificar visibilidad */
+.calendario-grid {
+    border: 2px solid red !important;
+    background: yellow !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 999 !important;
+}
+
+.paso.activo .calendario-grid {
+    display: grid !important;
 }
 
 /* Responsive mejorado */
