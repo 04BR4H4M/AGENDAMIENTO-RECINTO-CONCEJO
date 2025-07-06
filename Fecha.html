@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +7,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="./CSS/Fecha.css">
 </head>
-
 <body>
     <header>
         <h1>AGENDAMIENTO DE REUNIONES</h1>
     </header>
-
     <main class="wizard-wrapper">
         <div class="wizard-container">
-
             <div id="paso-1" class="paso activo">
                 <h2 class="paso-titulo">SELECCIONE LA FECHA</h2>
                 <section class="calendario">
+                    <div class="spinner-contenedor oculto" id="spinner-calendario">
+                        <div class="spinner"></div>
+                    </div>
                     <div class="navegacion-calendario">
                         <button id="btn-prev" class="btn-nav-calendario">&lt;</button>
                         <span id="mes-anio"></span>
@@ -35,43 +36,34 @@
                         <span class="leyenda-item no-disponible-total">No disponible</span>
                     </div>
                 </section>
-                
                 <section class="lista-agendamientos">
                     <h2 class="paso-titulo" style="margin-top: 40px;">Agendamientos Programados</h2>
-                    
                     <input type="search" id="buscador" placeholder="Buscar por persona o motivo...">
-                    
                     <div id="contenedor-lista"></div>
                 </section>
             </div>
-            
             <div id="paso-2" class="paso">
                 <h2 class="paso-titulo">SELECCIONE LA HORA</h2>
                 <div id="horas-disponibles-grid"></div>
                 <button type="button" class="btn-nav" onclick="irAPaso(1)">Anterior</button>
             </div>
-
             <div id="paso-3" class="paso">
                 <h2 class="paso-titulo">COMPLETE LOS DATOS</h2>
                 <form id="formulario-agendamiento" action="./PHP/guardar_agendamiento.php" method="POST">
                     <input type="hidden" id="fecha-seleccionada" name="fecha">
                     <input type="hidden" id="hora-seleccionada" name="hora">
-                    
                     <div class="campo-formulario">
                         <label for="nombre">Persona que agenda:</label>
                         <input type="text" id="nombre" name="nombre" required>
                     </div>
-
                     <div class="campo-formulario">
                         <label for="email">Correo Electrónico del Solicitante:</label>
                         <input type="email" id="email" name="email" required>
                     </div>
-
                     <div class="campo-formulario">
                         <label for="motivo">Motivo de agendamiento:</label>
                         <textarea id="motivo" name="motivo" rows="3" required></textarea>
                     </div>
-                    
                     <div class="campo-formulario">
                         <label for="duracion">Duración de la reunión:</label>
                         <select id="duracion" name="duracion_minutos" required>
@@ -88,7 +80,6 @@
                             <option value="360">6 horas</option>
                         </select>
                     </div>
-                    
                     <div class="botones-formulario">
                         <button type="button" class="btn-nav" onclick="irAPaso(2)">Anterior</button>
                         <button type="submit" class="btn-enviar">Confirmar Agendamiento</button>
@@ -97,14 +88,12 @@
             </div>
         </div>
     </main>
-
     <div class="logo-concejo">
         <a href="Fecha.html">
             <img src="./Logo/logo_concejo.png" alt="Logo Concejo Municipal de Nilo">
         </a>
         <p>Concejo Municipal de Nilo</p>
     </div>
-    
     <script src="./JS/fecha.js"></script>
 </body>
 </html>

@@ -345,3 +345,92 @@ header h1 {
     border-color: var(--color-primario-suave);
     box-shadow: 0 0 0 3px rgba(91, 157, 255, 0.25);
 }
+
+/* ===== ESTILOS PARA EL INDICADOR DE CARGA (SPINNER) ===== */
+.calendario {
+    position: relative; /* Necesario para posicionar el spinner dentro */
+}
+
+.spinner-contenedor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-radius: 16px;
+    transition: opacity 0.3s;
+}
+
+.spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #5b9dff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+.spinner-contenedor.oculto {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== ESTILOS RESPONSIVOS PARA MÓVILES ===== */
+/* Estas reglas se aplican solo si el ancho de la pantalla es de 600px o menos */
+@media (max-width: 600px) {
+
+    body {
+        padding: 0; /* Quitamos el padding general en móviles */
+    }
+
+    header {
+        padding: 20px 10px 0 10px; /* Reducimos el padding del header */
+    }
+    
+    header h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .wizard-wrapper {
+        /* Hacemos que el contenedor ocupe toda la pantalla del móvil sin bordes ni sombras */
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 15px; /* Reducimos el padding interno */
+        min-height: 100vh; /* Asegura que ocupe toda la altura */
+    }
+
+    /* Hacemos la fuente del calendario más pequeña */
+    .dia-nombre {
+        font-size: 12px;
+    }
+    .dia {
+        font-size: 14px;
+    }
+    
+    .calendario-grid {
+        gap: 5px; /* Reducimos el espacio entre los días */
+    }
+    
+    /* Ajustamos la lista de agendamientos para que se vea bien en vertical */
+    .cita-card {
+        flex-direction: column; /* Apilamos la info y los botones */
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .logo-concejo {
+        display: none; /* Ocultamos el logo en pantallas pequeñas para dar más espacio al contenido */
+    }
+}

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // --- VARIABLES GLOBALES ---
     let horasDisponiblesPorDia = {};
-    let todosLosAgendamientos = []; // Guardaremos todas las citas aquí para poder buscarlas
+    let todosLosAgendamientos = [];
     const datosAgendamiento = { fecha: null, hora: null };
 
     // --- ELEMENTOS DEL DOM ---
@@ -11,13 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnNext = document.getElementById("btn-next");
     const formulario = document.getElementById('formulario-agendamiento');
     const campoBuscador = document.getElementById('buscador');
+    const spinner = document.getElementById('spinner-calendario'); // Nuevo
 
     if (!contenedorGrid) {
-        console.error("Error Crítico: No se encontró el contenedor del calendario (.calendario-grid).");
+        console.error("Error Crítico: No se encontró el contenedor del calendario.");
+        if(spinner) spinner.classList.add('oculto');
         return;
     }
     
-    // --- LÓGICA DEL ASISTENTE (MOSTRAR/OCULTAR PASOS) ---
+    // --- LÓGICA DEL WIZARD ---
     window.irAPaso = function(numeroPaso) {
         document.querySelectorAll('.paso').forEach(paso => {
             paso.classList.remove('activo');
@@ -48,12 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         listaDeCitas.forEach(cita => {
             const citaCard = document.createElement('div');
             citaCard.className = 'cita-card';
-            const hora24 = parseInt(cita.hora.substring(0, 2));
-            const minutos = cita.hora.substring(3, 5);
-            const ampm = hora24 >= 12 ? 'PM' : 'AM';
-            let hora12 = hora24 % 12;
-            if (hora12 === 0) hora12 = 12;
-            const horaFormateada = `${String(hora12).padStart(2, '0')}:${minutos} ${ampm}`;
+            const horaFormateada = new Date(cita.fecha + 'T' + cita.hora).toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true });
             citaCard.innerHTML = `
                 <div class="cita-info">
                     <p><strong>Fecha:</strong> ${cita.fecha}</p>
@@ -72,10 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
     window.eliminarAgendamiento = function(id) {
         if (confirm('¿Estás seguro de que quieres eliminar este agendamiento?')) {
             fetch(`./PHP/eliminar_agendamiento.php?id=${id}`)
-                .then(response => response.text()).then(respuesta => {
-                    alert(respuesta);
-                    location.reload();
-                }).catch(error => console.error('Error al eliminar:', error));
+                .then(response => response.text())
+                .then(respuesta => {
+                    Toastify({ text: respuesta, duration: 3000, gravity: "top", position: "right", backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)" }).showToast();
+                    setTimeout(() => { location.reload(); }, 1500);
+                })
+                .catch(error => console.error('Error al eliminar:', error));
         }
     }
     
@@ -109,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const todasLasHorasPosibles = generarHorariosDeTrabajo();
         const citasDelDia = horasDisponiblesPorDia[fecha] || [];
         let slotsBloqueados = new Set();
-
         citasDelDia.forEach(cita => {
             const inicioEnMinutos = horaAMinutos(cita.hora);
             const duracion = parseInt(cita.duracion_minutos);
@@ -118,22 +116,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 slotsBloqueados.add(i);
             }
         });
-
-        const horasLibres = todasLasHorasPosibles.filter(hora => {
-            const minutosDeEstaHora = horaAMinutos(hora);
-            return !slotsBloqueados.has(minutosDeEstaHora);
-        });
-
+        const horasLibres = todasLasHorasPosibles.filter(hora => !slotsBloqueados.has(horaAMinutos(hora)));
         if (horasLibres.length > 0) {
             horasLibres.forEach(hora => {
                 const botonHora = document.createElement('button');
                 botonHora.classList.add('hora-disponible');
-                const hora24 = parseInt(hora.substring(0, 2));
-                const minutos = hora.substring(3, 5);
-                const ampm = hora24 >= 12 ? 'PM' : 'AM';
-                let hora12 = hora24 % 12;
-                if (hora12 === 0) hora12 = 12;
-                botonHora.textContent = `${String(hora12).padStart(2, '0')}:${minutos} ${ampm}`;
+                const horaDate = new Date(`1970-01-01T${hora}`);
+                botonHora.textContent = horaDate.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true });
                 botonHora.addEventListener('click', () => {
                     datosAgendamiento.hora = hora;
                     irAPaso(3);
@@ -197,34 +186,22 @@ document.addEventListener('DOMContentLoaded', function() {
     function obtenerNombreMes(mes) { const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; return meses[mes]; }
     
     // --- EVENT LISTENERS ---
-    btnPrev.addEventListener("click", () => { mes--; if (mes < 0) { mes = 11; anio--; } generarCalendario(); });
-    btnNext.addEventListener("click", () => { mes++; if (mes > 11) { mes = 0; anio++; } generarCalendario(); });
-    
-    if(campoBuscador) {
-        campoBuscador.addEventListener('input', function() {
-            const terminoBusqueda = campoBuscador.value.toLowerCase();
-            const resultadosFiltrados = todosLosAgendamientos.filter(cita => {
-                return cita.persona.toLowerCase().includes(terminoBusqueda) || 
-                       cita.motivo.toLowerCase().includes(terminoBusqueda);
-            });
-            mostrarListaAgendamientos(resultadosFiltrados);
-        });
-    }
-
-    if (formulario) {
-        formulario.addEventListener('submit', function() {
-            const btnEnviar = formulario.querySelector('.btn-enviar');
-            btnEnviar.disabled = true;
-            btnEnviar.textContent = 'Enviando...';
-        });
-    }
+    btnPrev.addEventListener("click", () => { if(spinner) spinner.classList.remove('oculto'); generarCalendario(); if(spinner) spinner.classList.add('oculto'); });
+    btnNext.addEventListener("click", () => { if(spinner) spinner.classList.remove('oculto'); generarCalendario(); if(spinner) spinner.classList.add('oculto'); });
+    if(campoBuscador) { campoBuscador.addEventListener('input', function() { const terminoBusqueda = this.value.toLowerCase(); const resultadosFiltrados = todosLosAgendamientos.filter(cita => cita.persona.toLowerCase().includes(terminoBusqueda) || cita.motivo.toLowerCase().includes(terminoBusqueda)); mostrarListaAgendamientos(resultadosFiltrados); }); }
+    if (formulario) { formulario.addEventListener('submit', function() { const btnEnviar = formulario.querySelector('.btn-enviar'); btnEnviar.disabled = true; btnEnviar.textContent = 'Enviando...'; }); }
 
     // --- FETCH INICIAL DE DATOS ---
+    if(spinner) spinner.classList.remove('oculto');
+
     fetch('./PHP/obtener_agendamientos.php')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) { throw new Error('La respuesta de la red no fue correcta'); }
+            return response.json();
+        })
         .then(data => {
             horasDisponiblesPorDia = data;
-            // Convertimos el objeto a un array plano para poder buscar y filtrar
+            todosLosAgendamientos = []; // Limpiamos antes de rellenar
             for (const fecha in data) {
                 data[fecha].forEach(cita => {
                     todosLosAgendamientos.push({ ...cita, fecha: fecha });
@@ -238,5 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error al obtener los agendamientos:', error);
             irAPaso(1);
             generarCalendario();
+        })
+        .finally(() => {
+            if(spinner) spinner.classList.add('oculto');
         });
 });
