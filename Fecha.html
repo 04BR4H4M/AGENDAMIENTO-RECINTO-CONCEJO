@@ -3,70 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamiento de Cita - Concejo de Nilo</title>
+    <title>Agendamiento de Reuniones - Concejo Municipal de Nilo</title>
+    
+    <!-- Fuentes mejoradas -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Meta tags para SEO y redes sociales -->
+    <meta name="description" content="Sistema de agendamiento de reuniones del Concejo Municipal de Nilo. Agenda tu cita de manera fácil y rápida.">
+    <meta name="keywords" content="agendamiento, reuniones, concejo municipal, nilo, citas">
+    <meta property="og:title" content="Agendamiento de Reuniones - Concejo Municipal de Nilo">
+    <meta property="og:description" content="Sistema de agendamiento de reuniones del Concejo Municipal de Nilo">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./Logo/logo_concejo.png">
+    
+    <!-- Librerías externas -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <!-- Estilos principales -->
     <link rel="stylesheet" href="./CSS/Fecha.css">
 </head>
 <body>
+    <!-- Header mejorado -->
     <header>
         <h1>AGENDAMIENTO DE REUNIONES</h1>
     </header>
+
+    <!-- Contenedor principal -->
     <main class="wizard-wrapper">
         <div class="wizard-container">
+            
+            <!-- Paso 1: Selección de fecha -->
             <div id="paso-1" class="paso activo">
-                <h2 class="paso-titulo">SELECCIONE LA FECHA</h2>
+                <h2 class="paso-titulo">Seleccione la Fecha</h2>
+                
                 <section class="calendario">
+                    <!-- Spinner de carga -->
                     <div class="spinner-contenedor oculto" id="spinner-calendario">
                         <div class="spinner"></div>
                     </div>
+                    
+                    <!-- Navegación del calendario -->
                     <div class="navegacion-calendario">
-                        <button id="btn-prev" class="btn-nav-calendario">&lt;</button>
-                        <span id="mes-anio"></span>
-                        <button id="btn-next" class="btn-nav-calendario">&gt;</button>
+                        <button id="btn-prev" class="btn-nav-calendario" aria-label="Mes anterior">‹</button>
+                        <span id="mes-anio" role="heading" aria-level="3"></span>
+                        <button id="btn-next" class="btn-nav-calendario" aria-label="Mes siguiente">›</button>
                     </div>
-                    <div class="calendario-grid"></div>
-                    <div id="leyenda">
-                        <span class="leyenda-item actual">Actual</span>
-                        <span class="leyenda-item disponible">Disponible</span>
-                        <span class="leyenda-item no-disponible">Pocos cupos</span>
-                        <span class="leyenda-item no-disponible-total">No disponible</span>
+                    
+                    <!-- Grid del calendario -->
+                    <div class="calendario-grid" role="grid" aria-label="Calendario de fechas disponibles"></div>
+                    
+                    <!-- Leyenda -->
+                    <div id="leyenda" role="list" aria-label="Leyenda del calendario">
+                        <span class="leyenda-item actual" role="listitem">Fecha actual</span>
+                        <span class="leyenda-item disponible" role="listitem">Disponible</span>
+                        <span class="leyenda-item no-disponible" role="listitem">Pocos cupos</span>
+                        <span class="leyenda-item no-disponible-total" role="listitem">No disponible</span>
                     </div>
                 </section>
+
+                <!-- Lista de agendamientos -->
                 <section class="lista-agendamientos">
-                    <h2 class="paso-titulo" style="margin-top: 40px;">Agendamientos Programados</h2>
-                    <input type="search" id="buscador" placeholder="Buscar por persona o motivo...">
-                    <div id="contenedor-lista"></div>
+                    <h2 class="paso-titulo">Reuniones Programadas</h2>
+                    <input 
+                        type="search" 
+                        id="buscador" 
+                        placeholder="Buscar por persona o motivo..." 
+                        aria-label="Buscar reuniones"
+                    >
+                    <div id="contenedor-lista" role="list" aria-label="Lista de reuniones programadas"></div>
                 </section>
             </div>
+
+            <!-- Paso 2: Selección de hora -->
             <div id="paso-2" class="paso">
-                <h2 class="paso-titulo">SELECCIONE LA HORA</h2>
-                <div id="horas-disponibles-grid"></div>
-                <button type="button" class="btn-nav" onclick="irAPaso(1)">Anterior</button>
+                <h2 class="paso-titulo">Seleccione la Hora</h2>
+                <div id="horas-disponibles-grid" role="list" aria-label="Horas disponibles"></div>
+                <div class="botones-formulario">
+                    <button type="button" class="btn-nav" onclick="irAPaso(1)">
+                        ← Anterior
+                    </button>
+                </div>
             </div>
+
+            <!-- Paso 3: Formulario de datos -->
             <div id="paso-3" class="paso">
-                <h2 class="paso-titulo">COMPLETE LOS DATOS</h2>
+                <h2 class="paso-titulo">Complete los Datos</h2>
+                
                 <form id="formulario-agendamiento" action="./PHP/guardar_agendamiento.php" method="POST">
                     <input type="hidden" id="fecha-seleccionada" name="fecha">
                     <input type="hidden" id="hora-seleccionada" name="hora">
+                    
                     <div class="campo-formulario">
-                        <label for="nombre">Persona que agenda:</label>
-                        <input type="text" id="nombre" name="nombre" required>
+                        <label for="nombre">Persona que agenda *</label>
+                        <input 
+                            type="text" 
+                            id="nombre" 
+                            name="nombre" 
+                            required 
+                            placeholder="Ingrese su nombre completo"
+                            aria-describedby="nombre-help"
+                        >
+                        <small id="nombre-help" class="campo-ayuda">Nombre completo de la persona que solicita la reunión</small>
                     </div>
+
                     <div class="campo-formulario">
-                        <label for="email">Correo Electrónico del Solicitante:</label>
-                        <input type="email" id="email" name="email" required>
+                        <label for="email">Correo Electrónico *</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required 
+                            placeholder="ejemplo@correo.com"
+                            aria-describedby="email-help"
+                        >
+                        <small id="email-help" class="campo-ayuda">Recibirá la confirmación en este correo</small>
                     </div>
+
                     <div class="campo-formulario">
-                        <label for="motivo">Motivo de agendamiento:</label>
-                        <textarea id="motivo" name="motivo" rows="3" required></textarea>
+                        <label for="motivo">Motivo de la reunión *</label>
+                        <textarea 
+                            id="motivo" 
+                            name="motivo" 
+                            rows="4" 
+                            required 
+                            placeholder="Describa brevemente el motivo de su reunión..."
+                            aria-describedby="motivo-help"
+                        ></textarea>
+                        <small id="motivo-help" class="campo-ayuda">Proporcione una descripción clara del tema a tratar</small>
                     </div>
+
                     <div class="campo-formulario">
-                        <label for="duracion">Duración de la reunión:</label>
-                        <select id="duracion" name="duracion_minutos" required>
+                        <label for="duracion">Duración estimada *</label>
+                        <select id="duracion" name="duracion_minutos" required aria-describedby="duracion-help">
+                            <option value="">Seleccione la duración</option>
                             <option value="30">30 minutos</option>
                             <option value="45">45 minutos</option>
                             <option value="60" selected>1 hora</option>
@@ -79,21 +153,31 @@
                             <option value="300">5 horas</option>
                             <option value="360">6 horas</option>
                         </select>
+                        <small id="duracion-help" class="campo-ayuda">Tiempo estimado que durará la reunión</small>
                     </div>
+
                     <div class="botones-formulario">
-                        <button type="button" class="btn-nav" onclick="irAPaso(2)">Anterior</button>
-                        <button type="submit" class="btn-enviar">Confirmar Agendamiento</button>
+                        <button type="button" class="btn-nav" onclick="irAPaso(2)">
+                            ← Anterior
+                        </button>
+                        <button type="submit" class="btn-enviar">
+                            ✓ Confirmar Agendamiento
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </main>
+
+    <!-- Logo del concejo -->
     <div class="logo-concejo">
-        <a href="Fecha.html">
+        <a href="Fecha.html" aria-label="Ir al inicio">
             <img src="./Logo/logo_concejo.png" alt="Logo Concejo Municipal de Nilo">
         </a>
         <p>Concejo Municipal de Nilo</p>
     </div>
+
+    <!-- Scripts -->
     <script src="./JS/fecha.js"></script>
 </body>
 </html>

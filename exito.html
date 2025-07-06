@@ -3,29 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamiento Exitoso</title>
+    <title>Agendamiento Exitoso - Concejo Municipal de Nilo</title>
+    
+    <!-- Fuentes mejoradas -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Meta tags -->
+    <meta name="description" content="Su reunión ha sido agendada exitosamente en el Concejo Municipal de Nilo">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./Logo/logo_concejo.png">
+    
+    <!-- Estilos -->
     <link rel="stylesheet" href="./CSS/Fecha.css">
+    
+    <style>
+        .exito-container {
+            text-align: center;
+            padding: var(--espacio-2xl);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .icono-exito {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-secundario), var(--color-secundario-hover));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--espacio-xl);
+            animation: pulse 2s infinite;
+        }
+        
+        .icono-exito::before {
+            content: '✓';
+            color: var(--color-blanco);
+            font-size: 2.5rem;
+            font-weight: var(--peso-bold);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .mensaje-principal {
+            font-size: 2rem;
+            font-weight: var(--peso-bold);
+            color: var(--color-secundario);
+            margin-bottom: var(--espacio-lg);
+        }
+        
+        .mensaje-secundario {
+            font-size: 1.125rem;
+            color: var(--color-gris-dark);
+            margin-bottom: var(--espacio-2xl);
+            line-height: 1.6;
+            max-width: 500px;
+        }
+        
+        .acciones-exito {
+            display: flex;
+            gap: var(--espacio-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-principal {
+            background: linear-gradient(135deg, var(--color-primario), var(--color-primario-hover));
+            color: var(--color-blanco);
+            padding: var(--espacio-lg) var(--espacio-2xl);
+            border-radius: var(--radio-md);
+            text-decoration: none;
+            font-weight: var(--peso-semibold);
+            font-size: 1rem;
+            transition: all var(--transicion-rapida);
+            box-shadow: var(--sombra-md);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--espacio-sm);
+        }
+        
+        .btn-principal:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--sombra-lg);
+        }
+        
+        .informacion-adicional {
+            background: var(--color-gris-light);
+            padding: var(--espacio-xl);
+            border-radius: var(--radio-lg);
+            margin-top: var(--espacio-2xl);
+            border-left: 4px solid var(--color-primario);
+        }
+        
+        .informacion-adicional h3 {
+            color: var(--color-negro);
+            margin-bottom: var(--espacio-md);
+            font-size: 1.25rem;
+        }
+        
+        .informacion-adicional p {
+            color: var(--color-gris-dark);
+            margin: 0;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <h1>AGENDAMIENTO DE REUNIONES</h1>
     </header>
 
+    <!-- Contenedor principal -->
     <main class="wizard-wrapper">
-        <div class="paso activo" style="text-align: center;">
-            <h2 class="paso-titulo" style="color: var(--color-verde-suave);">¡Éxito!</h2>
-            <p class="mensaje-exito">Tu reunión ha sido agendada correctamente.</p>
-            <a href="Fecha.html" class="btn-enviar" style="text-decoration: none; display: inline-block;">Agendar otra reunión</a>
+        <div class="exito-container">
+            <!-- Icono de éxito -->
+            <div class="icono-exito" aria-label="Éxito"></div>
+            
+            <!-- Mensajes -->
+            <h2 class="mensaje-principal">¡Reunión Agendada!</h2>
+            <p class="mensaje-secundario">
+                Su reunión ha sido programada exitosamente. Recibirá un correo de confirmación 
+                con todos los detalles en los próximos minutos.
+            </p>
+            
+            <!-- Acciones -->
+            <div class="acciones-exito">
+                <a href="Fecha.html" class="btn-principal">
+                    ← Agendar Nueva Reunión
+                </a>
+            </div>
+            
+            <!-- Información adicional -->
+            <div class="informacion-adicional">
+                <h3>Información Importante</h3>
+                <p>
+                    Por favor, llegue 10 minutos antes de la hora programada. 
+                    Si necesita cancelar o reprogramar su reunión, contáctenos con al menos 
+                    24 horas de anticipación.
+                </p>
+            </div>
         </div>
     </main>
-<div class="logo-concejo">
-    <a href="Fecha.html">
-        <img src="./Logo/logo_concejo.png" alt="Logo Concejo Municipal de Nilo">
-    </a>
-    <p>Concejo Municipal de Nilo</p>
-</div>
+
+    <!-- Logo del concejo -->
+    <div class="logo-concejo">
+        <a href="Fecha.html" aria-label="Ir al inicio">
+            <img src="./Logo/logo_concejo.png" alt="Logo Concejo Municipal de Nilo">
+        </a>
+        <p>Concejo Municipal de Nilo</p>
+    </div>
 </body>
 </html>
