@@ -13,9 +13,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const campoBuscador = document.getElementById('buscador');
     const spinner = document.getElementById('spinner-calendario');
 
+    // Verificación de elementos críticos
     if (!contenedorGrid) {
-        console.error("Error Crítico: No se encontró el contenedor del calendario.");
-        if(spinner) spinner.classList.add('oculto');
+        console.error("Error: No se encontró el contenedor del calendario (.calendario-grid)");
+        return;
+    }
+
+    if (!mesAnio) {
+        console.error("Error: No se encontró el elemento mes-anio");
+        return;
+    }
+
+    if (!btnPrev || !btnNext) {
+        console.error("Error: No se encontraron los botones de navegación");
         return;
     }
     
@@ -40,8 +50,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Si es el paso 3, llenar los campos ocultos
         if (numeroPaso === 3) {
-            document.getElementById('fecha-seleccionada').value = datosAgendamiento.fecha;
-            document.getElementById('hora-seleccionada').value = datosAgendamiento.hora;
+            const fechaInput = document.getElementById('fecha-seleccionada');
+            const horaInput = document.getElementById('hora-seleccionada');
+            
+            if (fechaInput && horaInput) {
+                fechaInput.value = datosAgendamiento.fecha;
+                horaInput.value = datosAgendamiento.hora;
+            }
             
             // Mostrar resumen de la selección
             mostrarResumenSeleccion();
@@ -80,7 +95,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Insertar antes del formulario
                 const formulario = document.getElementById('formulario-agendamiento');
-                formulario.parentNode.insertBefore(resumen, formulario);
+                if (formulario) {
+                    formulario.parentNode.insertBefore(resumen, formulario);
+                }
                 
                 // Agregar estilos para el resumen
                 const style = document.createElement('style');
@@ -108,8 +125,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.head.appendChild(style);
             }
             
-            document.getElementById('resumen-fecha').textContent = fechaFormateada;
-            document.getElementById('resumen-hora').textContent = horaFormateada;
+            const resumenFecha = document.getElementById('resumen-fecha');
+            const resumenHora = document.getElementById('resumen-hora');
+            
+            if (resumenFecha && resumenHora) {
+                resumenFecha.textContent = fechaFormateada;
+                resumenHora.textContent = horaFormateada;
+            }
         }
     }
 
@@ -122,8 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (listaDeCitas.length === 0) {
             contenedorLista.innerHTML = `
-                <div class="sin-citas">
-                    <p>No hay reuniones programadas.</p>
+                <div class="sin-citas" style="text-align: center; padding: var(--espacio-2xl); color: var(--color-gris);">
+                    <p style="font-size: 1.125rem; margin-bottom: var(--espacio-md);">No hay reuniones programadas.</p>
                     <small>Las reuniones aparecerán aquí una vez que sean agendadas.</small>
                 </div>
             `;
@@ -153,11 +175,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             citaCard.innerHTML = `
                 <div class="cita-info">
-                    <p><strong>Fecha</strong>${fechaFormateada}</p>
-                    <p><strong>Hora</strong>${horaFormateada}</p>
-                    <p><strong>Persona</strong>${escapeHtml(cita.persona)}</p>
-                    <p><strong>Motivo</strong>${escapeHtml(cita.motivo)}</p>
-                    <p><strong>Duración</strong>${cita.duracion_minutos} minutos</p>
+                    <p><strong>Fecha:</strong> ${fechaFormateada}</p>
+                    <p><strong>Hora:</strong> ${horaFormateada}</p>
+                    <p><strong>Persona:</strong> ${escapeHtml(cita.persona)}</p>
+                    <p><strong>Motivo:</strong> ${escapeHtml(cita.motivo)}</p>
+                    <p><strong>Duración:</strong> ${cita.duracion_minutos} minutos</p>
                 </div>
                 <div class="cita-acciones">
                     <button class="btn-editar" onclick="editarAgendamiento(${cita.id})" aria-label="Editar reunión de ${escapeHtml(cita.persona)}">
@@ -197,14 +219,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.text())
                 .then(respuesta => {
                     // Mostrar notificación de éxito
-                    Toastify({
-                        text: respuesta,
-                        duration: 3000,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "linear-gradient(to right, #059669, #047857)",
-                        className: "toastify-success"
-                    }).showToast();
+                    if (typeof Toastify !== 'undefined') {
+                        Toastify({
+                            text: respuesta,
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #059669, #047857)",
+                            className: "toastify-success"
+                        }).showToast();
+                    }
                     
                     // Recargar la página después de un breve delay
                     setTimeout(() => {
@@ -219,14 +243,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     btnEliminar.disabled = false;
                     
                     // Mostrar notificación de error
-                    Toastify({
-                        text: "Error al eliminar la reunión. Inténtelo nuevamente.",
-                        duration: 3000,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "linear-gradient(to right, #dc2626, #b91c1c)",
-                        className: "toastify-error"
-                    }).showToast();
+                    if (typeof Toastify !== 'undefined') {
+                        Toastify({
+                            text: "Error al eliminar la reunión. Inténtelo nuevamente.",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #dc2626, #b91c1c)",
+                            className: "toastify-error"
+                        }).showToast();
+                    }
                 });
         }
     }
@@ -257,6 +283,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function mostrarHorasDisponibles(fecha) {
         const contenedorHoras = document.getElementById('horas-disponibles-grid');
+        if (!contenedorHoras) return;
+        
         contenedorHoras.innerHTML = '';
         
         const todasLasHorasPosibles = generarHorariosDeTrabajo();
@@ -318,6 +346,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generarCalendario() {
+        console.log('Generando calendario...'); // Debug
+        
+        if (!contenedorGrid) {
+            console.error('No se puede generar el calendario: contenedorGrid no existe');
+            return;
+        }
+        
         contenedorGrid.innerHTML = '';
         
         // Días de la semana
@@ -391,7 +426,12 @@ document.addEventListener('DOMContentLoaded', function() {
             contenedorGrid.appendChild(diaElemento);
         }
         
-        mesAnio.textContent = `${obtenerNombreMes(mes)} ${anio}`;
+        // Actualizar el título del mes
+        if (mesAnio) {
+            mesAnio.textContent = `${obtenerNombreMes(mes)} ${anio}`;
+        }
+        
+        console.log('Calendario generado correctamente'); // Debug
     }
     
     function obtenerNombreMes(mes) {
@@ -403,31 +443,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // --- EVENT LISTENERS MEJORADOS ---
-    btnPrev.addEventListener("click", () => {
-        if(spinner) spinner.classList.remove('oculto');
-        mes--;
-        if (mes < 0) {
-            mes = 11;
-            anio--;
-        }
-        setTimeout(() => {
-            generarCalendario();
-            if(spinner) spinner.classList.add('oculto');
-        }, 100);
-    });
+    if (btnPrev) {
+        btnPrev.addEventListener("click", () => {
+            if(spinner) spinner.classList.remove('oculto');
+            mes--;
+            if (mes < 0) {
+                mes = 11;
+                anio--;
+            }
+            setTimeout(() => {
+                generarCalendario();
+                if(spinner) spinner.classList.add('oculto');
+            }, 100);
+        });
+    }
     
-    btnNext.addEventListener("click", () => {
-        if(spinner) spinner.classList.remove('oculto');
-        mes++;
-        if (mes > 11) {
-            mes = 0;
-            anio++;
-        }
-        setTimeout(() => {
-            generarCalendario();
-            if(spinner) spinner.classList.add('oculto');
-        }, 100);
-    });
+    if (btnNext) {
+        btnNext.addEventListener("click", () => {
+            if(spinner) spinner.classList.remove('oculto');
+            mes++;
+            if (mes > 11) {
+                mes = 0;
+                anio++;
+            }
+            setTimeout(() => {
+                generarCalendario();
+                if(spinner) spinner.classList.add('oculto');
+            }, 100);
+        });
+    }
     
     // Búsqueda mejorada con debounce
     if(campoBuscador) {
@@ -451,42 +495,62 @@ document.addEventListener('DOMContentLoaded', function() {
             const btnEnviar = formulario.querySelector('.btn-enviar');
             
             // Validaciones adicionales
-            const nombre = document.getElementById('nombre').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const motivo = document.getElementById('motivo').value.trim();
+            const nombre = document.getElementById('nombre');
+            const email = document.getElementById('email');
+            const motivo = document.getElementById('motivo');
             
             if (!nombre || !email || !motivo) {
                 e.preventDefault();
-                Toastify({
-                    text: "Por favor, complete todos los campos obligatorios.",
-                    duration: 3000,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "linear-gradient(to right, #dc2626, #b91c1c)"
-                }).showToast();
+                alert('Error: No se encontraron todos los campos del formulario');
+                return;
+            }
+            
+            const nombreVal = nombre.value.trim();
+            const emailVal = email.value.trim();
+            const motivoVal = motivo.value.trim();
+            
+            if (!nombreVal || !emailVal || !motivoVal) {
+                e.preventDefault();
+                if (typeof Toastify !== 'undefined') {
+                    Toastify({
+                        text: "Por favor, complete todos los campos obligatorios.",
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "linear-gradient(to right, #dc2626, #b91c1c)"
+                    }).showToast();
+                } else {
+                    alert("Por favor, complete todos los campos obligatorios.");
+                }
                 return;
             }
             
             // Cambiar estado del botón
-            btnEnviar.disabled = true;
-            btnEnviar.innerHTML = `
-                <span style="display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px;"></span>
-                Enviando...
-            `;
+            if (btnEnviar) {
+                btnEnviar.disabled = true;
+                btnEnviar.innerHTML = `
+                    <span style="display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px;"></span>
+                    Enviando...
+                `;
+            }
         });
     }
 
     // --- FETCH INICIAL DE DATOS MEJORADO ---
+    console.log('Iniciando carga de datos...'); // Debug
+    
     if(spinner) spinner.classList.remove('oculto');
 
     fetch('./PHP/obtener_agendamientos.php')
         .then(response => {
+            console.log('Respuesta recibida:', response.status); // Debug
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
+            console.log('Datos recibidos:', data); // Debug
             horasDisponiblesPorDia = data;
             todosLosAgendamientos = [];
             
@@ -497,6 +561,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
             
+            console.log('Agendamientos procesados:', todosLosAgendamientos.length); // Debug
+            
             // Inicializar interfaz
             irAPaso(1);
             generarCalendario();
@@ -506,13 +572,17 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error al obtener los agendamientos:', error);
             
             // Mostrar mensaje de error al usuario
-            Toastify({
-                text: "Error al cargar los datos. Por favor, recargue la página.",
-                duration: 5000,
-                gravity: "top",
-                position: "right",
-                backgroundColor: "linear-gradient(to right, #dc2626, #b91c1c)"
-            }).showToast();
+            if (typeof Toastify !== 'undefined') {
+                Toastify({
+                    text: "Error al cargar los datos. Por favor, recargue la página.",
+                    duration: 5000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #dc2626, #b91c1c)"
+                }).showToast();
+            } else {
+                alert("Error al cargar los datos. Por favor, recargue la página.");
+            }
             
             // Inicializar interfaz sin datos
             irAPaso(1);
@@ -521,6 +591,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .finally(() => {
             if(spinner) spinner.classList.add('oculto');
+            console.log('Carga de datos finalizada'); // Debug
         });
 
     // --- NAVEGACIÓN CON TECLADO ---
@@ -536,4 +607,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Inicialización inmediata del calendario (fallback)
+    setTimeout(() => {
+        if (contenedorGrid && contenedorGrid.children.length === 0) {
+            console.log('Forzando generación del calendario...'); // Debug
+            generarCalendario();
+        }
+    }, 1000);
 });

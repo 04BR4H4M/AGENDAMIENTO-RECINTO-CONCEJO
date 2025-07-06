@@ -50,12 +50,14 @@
                     <!-- Navegación del calendario -->
                     <div class="navegacion-calendario">
                         <button id="btn-prev" class="btn-nav-calendario" aria-label="Mes anterior">‹</button>
-                        <span id="mes-anio" role="heading" aria-level="3"></span>
+                        <span id="mes-anio" role="heading" aria-level="3">Cargando...</span>
                         <button id="btn-next" class="btn-nav-calendario" aria-label="Mes siguiente">›</button>
                     </div>
                     
                     <!-- Grid del calendario -->
-                    <div class="calendario-grid" role="grid" aria-label="Calendario de fechas disponibles"></div>
+                    <div class="calendario-grid" role="grid" aria-label="Calendario de fechas disponibles">
+                        <!-- El calendario se generará aquí dinámicamente -->
+                    </div>
                     
                     <!-- Leyenda -->
                     <div id="leyenda" role="list" aria-label="Leyenda del calendario">
@@ -75,14 +77,18 @@
                         placeholder="Buscar por persona o motivo..." 
                         aria-label="Buscar reuniones"
                     >
-                    <div id="contenedor-lista" role="list" aria-label="Lista de reuniones programadas"></div>
+                    <div id="contenedor-lista" role="list" aria-label="Lista de reuniones programadas">
+                        <!-- Las reuniones se cargarán aquí dinámicamente -->
+                    </div>
                 </section>
             </div>
 
             <!-- Paso 2: Selección de hora -->
             <div id="paso-2" class="paso">
                 <h2 class="paso-titulo">Seleccione la Hora</h2>
-                <div id="horas-disponibles-grid" role="list" aria-label="Horas disponibles"></div>
+                <div id="horas-disponibles-grid" role="list" aria-label="Horas disponibles">
+                    <!-- Las horas se generarán aquí dinámicamente -->
+                </div>
                 <div class="botones-formulario">
                     <button type="button" class="btn-nav" onclick="irAPaso(1)">
                         ← Anterior
