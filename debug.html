@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Calendario</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-grid { 
+            display: grid; 
+            grid-template-columns: repeat(7, 1fr); 
+            gap: 10px; 
+            border: 2px solid red; 
+            padding: 20px; 
+            background: yellow; 
+            margin: 20px 0;
+        }
+        .test-item { 
+            background: blue; 
+            color: white; 
+            padding: 10px; 
+            text-align: center; 
+        }
+        .debug-info { 
+            background: #f0f0f0; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-left: 4px solid #007cba; 
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug del Calendario</h1>
+    
+    <div class="debug-info">
+        <h3>Prueba 1: Grid CSS Básico</h3>
+        <p>Si ves 7 cuadros azules en una fila, el CSS Grid funciona:</p>
+        <div class="test-grid">
+            <div class="test-item">1</div>
+            <div class="test-item">2</div>
+            <div class="test-item">3</div>
+            <div class="test-item">4</div>
+            <div class="test-item">5</div>
+            <div class="test-item">6</div>
+            <div class="test-item">7</div>
+        </div>
+    </div>
+
+    <div class="debug-info">
+        <h3>Prueba 2: Elementos del DOM</h3>
+        <button onclick="verificarElementos()">Verificar Elementos</button>
+        <div id="resultado-elementos"></div>
+    </div>
+
+    <div class="debug-info">
+        <h3>Prueba 3: JavaScript del Calendario</h3>
+        <button onclick="probarCalendario()">Probar Generación de Calendario</button>
+        <div id="calendario-prueba" style="border: 2px solid green; min-height: 200px; margin: 10px 0;"></div>
+    </div>
+
+    <div class="debug-info">
+        <h3>Prueba 4: Ir a la página principal</h3>
+        <a href="Fecha.html" style="background: #007cba; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+            Ir a Fecha.html
+        </a>
+    </div>
+
+    <script>
+        function verificarElementos() {
+            const elementos = [
+                '.calendario-grid',
+                '#mes-anio',
+                '#btn-prev',
+                '#btn-next',
+                '.paso',
+                '#paso-1'
+            ];
+            
+            let resultado = '<h4>Verificación de elementos:</h4><ul>';
+            elementos.forEach(selector => {
+                const elemento = document.querySelector(selector);
+                resultado += `<li>${selector}: ${elemento ? '✅ Encontrado' : '❌ NO encontrado'}</li>`;
+            });
+            resultado += '</ul>';
+            
+            document.getElementById('resultado-elementos').innerHTML = resultado;
+        }
+
+        function probarCalendario() {
+            const contenedor = document.getElementById('calendario-prueba');
+            contenedor.innerHTML = '';
+            
+            // Crear grid de prueba
+            const grid = document.createElement('div');
+            grid.style.cssText = `
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                gap: 5px;
+                padding: 10px;
+                background: #f0f0f0;
+                border: 1px solid #ccc;
+            `;
+            
+            // Días de la semana
+            const dias = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
+            dias.forEach(dia => {
+                const elemento = document.createElement('div');
+                elemento.textContent = dia;
+                elemento.style.cssText = `
+                    background: #007cba;
+                    color: white;
+                    padding: 8px;
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 12px;
+                `;
+                grid.appendChild(elemento);
+            });
+            
+            // Días del mes (ejemplo)
+            for (let i = 1; i <= 31; i++) {
+                const elemento = document.createElement('div');
+                elemento.textContent = i;
+                elemento.style.cssText = `
+                    background: #e0e0e0;
+                    padding: 8px;
+                    text-align: center;
+                    cursor: pointer;
+                    border-radius: 4px;
+                `;
+                elemento.addEventListener('click', () => {
+                    alert(`Día ${i} seleccionado`);
+                });
+                grid.appendChild(elemento);
+            }
+            
+            contenedor.appendChild(grid);
+            contenedor.innerHTML += '<p style="color: green; margin-top: 10px;">✅ Calendario de prueba generado correctamente</p>';
+        }
+    </script>
+</body>
+</html>
