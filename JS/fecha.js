@@ -379,31 +379,43 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- MANEJO DEL FORMULARIO ---
-    if (formulario) {
-        formulario.addEventListener('submit', function(e) {
-            const nombre = document.getElementById('nombre');
-            const email = document.getElementById('email');
-            const motivo = document.getElementById('motivo');
-            
-            if (!nombre || !email || !motivo) {
-                e.preventDefault();
-                alert('Error: Campos del formulario no encontrados');
-                return;
-            }
-            
-            if (!nombre.value.trim() || !email.value.trim() || !motivo.value.trim()) {
-                e.preventDefault();
-                alert('Por favor, complete todos los campos obligatorios.');
-                return;
-            }
-            
-            const btnEnviar = formulario.querySelector('.btn-enviar');
-            if (btnEnviar) {
-                btnEnviar.disabled = true;
-                btnEnviar.textContent = 'Enviando...';
-            }
-        });
-    }
+   // En fecha.js, dentro del if(formulario)
+formulario.addEventListener('submit', function(e) {
+    e.preventDefault(); // ¡Prevenimos el envío tradicional!
+
+    const btnEnviar = formulario.querySelector('.btn-enviar');
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Guardando...';
+
+    const formData = new FormData(formulario);
+
+    fetch('./PHP/guardar_agendamiento.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        Toastify({
+            text: data.message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: data.success ? "linear-gradient(to right, #00b09b, #96c93d)" : "linear-gradient(to right, #ff5f6d, #ffc371)",
+        }).showToast();
+
+        if (data.success) {
+            setTimeout(() => { location.href = 'exito.html'; }, 1500);
+        } else {
+            btnEnviar.disabled = false;
+            btnEnviar.textContent = 'Confirmar Agendamiento';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        btnEnviar.disabled = false;
+        btnEnviar.textContent = 'Confirmar Agendamiento';
+    });
+});
 
     // --- INICIALIZACIÓN ---
     function inicializarAplicacion() {
