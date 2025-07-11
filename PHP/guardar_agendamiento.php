@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
             $mail->Username   = 'concejo@nilo-cundinamarca.gov.co';
-            $mail->Password   = 'xvje nvlb mfsc uxlf'; // Tu contraseña de aplicación
+            $mail->Password   = 'xvjenvlbmfscuxlf'; // Tu contraseña de aplicación (sin espacios)
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port       = 465;
 
@@ -49,7 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->addAddress($email_solicitante, $nombre);
             
             // Adjuntamos el logo para el correo
-            $mail->addEmbeddedImage('../Logo/LOGO CONCEJO NILO - CUND.png', 'logo_concejo');
+            // ¡Asegúrate de que esta ruta sea correcta!
+            $mail->addEmbeddedImage('../Logo/logo_concejo.png', 'logo_concejo');
 
             // Contenido del correo
             $mail->isHTML(true);
@@ -102,7 +103,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         } catch (Exception $e) {
             // El correo falló, pero la cita se guardó.
-            enviarRespuesta(true, "Cita guardada, pero hubo un error al enviar el correo: {$mail->ErrorInfo}");
+            // Es importante enviar el mensaje de error de PHPMailer para saber qué falló.
+            enviarRespuesta(false, "Cita guardada, pero hubo un error al enviar el correo: {$mail->ErrorInfo}");
         }
     } else {
         // Falló al guardar en la base de datos
