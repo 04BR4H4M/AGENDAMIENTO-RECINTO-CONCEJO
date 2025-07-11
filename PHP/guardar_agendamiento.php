@@ -1,19 +1,25 @@
 <?php
-// Incluimos las clases de PHPMailer
+// Incluimos las clases de PHPMailer y la configuración
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Requerimos los archivos de la biblioteca
 require 'src/Exception.php';
 require 'src/PHPMailer.php';
 require 'src/SMTP.php';
-
-// Incluimos tu archivo de configuración
 include 'db_config.php';
+
+// Establecemos la cabecera para la respuesta JSON
+header('Content-Type: application/json');
+
+// Función para enviar respuestas JSON
+function enviarRespuesta($success, $message) {
+    echo json_encode(['success' => $success, 'message' => $message]);
+    exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Recogemos todos los datos del formulario
+    // Recogemos y limpiamos los datos del formulario
     $fecha = $_POST['fecha'];
     $hora = $_POST['hora'];
     $nombre = trim($_POST['nombre']);
@@ -34,30 +40,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Host       = 'smtp.gmail.com';
             $mail->SMTPAuth   = true;
             $mail->Username   = 'concejo@nilo-cundinamarca.gov.co';
-            $mail->Password   = 'xvje nvlb mfsc uxlf';
+            $mail->Password   = 'xvje nvlb mfsc uxlf'; // Tu contraseña de aplicación
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port       = 465;
 
             // Remitente y Destinatario
             $mail->setFrom('concejo@nilo-cundinamarca.gov.co', 'Concejo Municipal de Nilo');
             $mail->addAddress($email_solicitante, $nombre);
-
-            // ===== INICIO DE LA NUEVA TÉCNICA PARA EL LOGO =====
             
-            // 1. Adjuntamos la imagen del logo directamente desde el archivo.
-            // PHPMailer la convertirá y le asignará un ID único: 'logo_concejo'.
-            // ¡Asegúrate de que la ruta '../Logo/...' sea correcta desde la carpeta PHP!
+            // Adjuntamos el logo para el correo
             $mail->addEmbeddedImage('../Logo/LOGO CONCEJO NILO - CUND.png', 'logo_concejo');
 
             // Contenido del correo
             $mail->isHTML(true);
             $mail->CharSet = 'UTF-8';
             $mail->Subject = 'Confirmación de Agendamiento de Reunión';
-            
             $hora_formateada = date("g:i a", strtotime($hora));
             
-            // 2. En el HTML, la imagen ahora hace referencia a ese ID con "cid:".
-            $mail->Body    = '
+            // Cuerpo del correo (plantilla HTML)
+            $mail->Body = '
             <!DOCTYPE html>
             <html lang="es">
             <head><meta charset="UTF-8"></head>
@@ -96,20 +97,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </body>
             </html>';
 
-            // ===== FIN DE LA NUEVA TÉCNICA =====
-
             $mail->send();
-            
-            header("Location: ../exito.html?status=correo_enviado");
-            exit();
+            enviarRespuesta(true, "¡Reunión agendada! Se ha enviado un correo de confirmación.");
 
         } catch (Exception $e) {
-            header("Location: ../exito.html?status=cita_guardada_pero_correo_fallo");
-            exit();
+            // El correo falló, pero la cita se guardó.
+            enviarRespuesta(true, "Cita guardada, pero hubo un error al enviar el correo: {$mail->ErrorInfo}");
         }
     } else {
-        header("Location: ../Fecha.html?error=db_error");
-        exit();
+        // Falló al guardar en la base de datos
+        enviarRespuesta(false, "Error al guardar la cita en la base de datos.");
     }
+} else {
+    // Si no es un método POST
+    enviarRespuesta(false, "Método de solicitud no válido.");
 }
 ?>
